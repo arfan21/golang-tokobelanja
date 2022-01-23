@@ -1,5 +1,6 @@
 module github.com/arfan21/golang-tokobelanja
 
+// +heroku goVersion go1.17
 go 1.17
 
 require gorm.io/driver/postgres v1.2.3

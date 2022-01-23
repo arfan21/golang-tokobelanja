@@ -1,1 +1,1 @@
-web: golang-kanbanboard
+web: golang-tokobelanja
