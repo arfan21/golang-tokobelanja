@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/arfan21/golang-tokobelanja/server"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {

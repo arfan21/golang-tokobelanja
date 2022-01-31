@@ -1,6 +1,7 @@
 package controlleruser
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/arfan21/golang-tokobelanja/helper"
@@ -78,5 +79,5 @@ func (c *controller) Update(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, helper.NewResponse(http.StatusOK, response, nil))
+	ctx.JSON(http.StatusOK, helper.NewResponse(http.StatusOK, gin.H{"message": fmt.Sprintf("Your balance has been successfully updated to Rp.%d", response.Balance)}, nil))
 }

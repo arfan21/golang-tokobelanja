@@ -19,6 +19,7 @@ type Response struct {
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	Fullname  string     `json:"full_name"`
 	Email     string     `json:"email"`
+	Balance   int        `json:"balance"`
 }
 
 type RequestLogin struct {
