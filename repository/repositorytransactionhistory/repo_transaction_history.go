@@ -87,9 +87,9 @@ func (r *Repository) CreateTransaction(data entity.TransactionHistory) (entity.T
 	if err != nil {
 		return entity.TransactionHistory{}, err
 	}
-	user.Balance = user.Balance - data.TotalPrice
 
-	err = r.db.Updates(&user).Error
+	user.Balance = user.Balance - data.TotalPrice
+	err = r.db.Model(&user).Where("id = ?", user.ID).Update("balance", user.Balance).Error
 	if err != nil {
 		return entity.TransactionHistory{}, err
 	}
