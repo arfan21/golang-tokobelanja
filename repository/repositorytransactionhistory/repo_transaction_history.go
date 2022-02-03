@@ -3,7 +3,6 @@ package repositorytransactionhistory
 import (
 	"github.com/arfan21/golang-tokobelanja/entity"
 	"gorm.io/gorm"
-	"log"
 )
 
 type RepositoryTransactionHistory interface {
@@ -57,6 +56,15 @@ func (r *Repository) GetProduct(productID uint) (entity.Product, error) {
 	return product, nil
 }
 
+func (r *Repository) getCategory(id uint) (entity.Category, error) {
+	var category entity.Category
+	err := r.db.Where("id = ?", id).First(&category).Error
+	if err != nil {
+		return category, err
+	}
+	return category, nil
+}
+
 func (r *Repository) CreateTransaction(data entity.TransactionHistory) (entity.TransactionHistory, error) {
 	err := r.db.Create(&data).Error
 	if err != nil {
@@ -80,8 +88,19 @@ func (r *Repository) CreateTransaction(data entity.TransactionHistory) (entity.T
 		return entity.TransactionHistory{}, err
 	}
 	user.Balance = user.Balance - data.TotalPrice
-	log.Println(user.Balance)
+
 	err = r.db.Updates(&user).Error
+	if err != nil {
+		return entity.TransactionHistory{}, err
+	}
+
+	// update category sold
+	category, err := r.getCategory(product.CategoryID)
+	if err != nil {
+		return entity.TransactionHistory{}, err
+	}
+	category.SoldProductAmount = category.SoldProductAmount + data.Quantity
+	err = r.db.Updates(&category).Error
 	if err != nil {
 		return entity.TransactionHistory{}, err
 	}
