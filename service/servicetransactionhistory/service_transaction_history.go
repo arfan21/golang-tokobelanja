@@ -1,7 +1,7 @@
 package servicetransactionhistory
 
 import (
-	"errors"
+	"github.com/arfan21/golang-tokobelanja/constant"
 	"github.com/arfan21/golang-tokobelanja/entity"
 	"github.com/arfan21/golang-tokobelanja/model/modeltransactionhistory"
 	"github.com/arfan21/golang-tokobelanja/repository/repositorytransactionhistory"
@@ -56,7 +56,7 @@ func (s *Service) CreateTransactionHistory(request modeltransactionhistory.Reque
 
 	// validate stock
 	if product.Stock < request.Quantity {
-		return resp, errors.New("stock is not enough")
+		return resp, constant.ErrorOutOfStock
 	}
 
 	// validate balance
@@ -68,7 +68,7 @@ func (s *Service) CreateTransactionHistory(request modeltransactionhistory.Reque
 	totalPrice := product.Price * request.Quantity
 
 	if user.Balance < totalPrice {
-		return resp, errors.New("balance is not enough")
+		return resp, constant.ErrorBalance
 	}
 
 	transactionHistory := entity.TransactionHistory{}
@@ -79,6 +79,7 @@ func (s *Service) CreateTransactionHistory(request modeltransactionhistory.Reque
 	if err != nil {
 		return resp, err
 	}
+
 	resp.Message = "you successfully purchase the product"
 	resp.TransactionBill.TotalPrice = totalPrice
 	resp.TransactionBill.Quantity = request.Quantity

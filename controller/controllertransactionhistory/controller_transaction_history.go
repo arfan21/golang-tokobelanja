@@ -1,11 +1,12 @@
 package controllertransactionhistory
 
 import (
+	"net/http"
+
 	"github.com/arfan21/golang-tokobelanja/helper"
 	"github.com/arfan21/golang-tokobelanja/model/modeltransactionhistory"
 	"github.com/arfan21/golang-tokobelanja/service/servicetransactionhistory"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type ControllerTransactionHistory interface {
@@ -41,14 +42,14 @@ func (c *Controller) CreateTransaction(ctx *gin.Context) {
 	request := modeltransactionhistory.RequestTransaction{}
 	err := ctx.BindJSON(&request)
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, helper.NewResponse(http.StatusUnprocessableEntity, "Invalid request body", err))
+		ctx.JSON(http.StatusUnprocessableEntity, helper.NewResponse(http.StatusUnprocessableEntity, nil, err))
 		return
 	}
 	uID := ctx.MustGet("user_id").(uint)
 	request.UserID = uID
 	response, err := c.srv.CreateTransactionHistory(request)
 	if err != nil {
-		ctx.JSON(helper.GetStatusCode(err), helper.NewResponse(helper.GetStatusCode(err), "Failed to create transaction history", err))
+		ctx.JSON(helper.GetStatusCode(err), helper.NewResponse(helper.GetStatusCode(err), nil, err))
 		return
 	}
 	ctx.JSON(http.StatusCreated, helper.NewResponse(http.StatusCreated, response, nil))

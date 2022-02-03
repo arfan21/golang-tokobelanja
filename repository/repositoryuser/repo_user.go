@@ -13,6 +13,7 @@ type RepositoryUser interface {
 	IsEmailExist(email string) error
 	Login(email string) (entity.User, error)
 	Update(data entity.User) (entity.User, error)
+	GetByID(id uint) (entity.User, error)
 }
 
 type repository struct {
@@ -66,4 +67,14 @@ func (r *repository) Update(data entity.User) (entity.User, error) {
 	}
 
 	return data, nil
+}
+
+func (r *repository) GetByID(id uint) (entity.User, error) {
+	user := new(entity.User)
+	err := r.db.Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	return *user, nil
 }

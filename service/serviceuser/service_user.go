@@ -88,10 +88,14 @@ func (s *service) Update(data modeluser.RequestTopUp) (modeluser.Response, error
 		return modeluser.Response{}, err
 	}
 
-	entityUser := entity.User{}
-	copier.Copy(&entityUser, &data)
+	dataUser, err := s.repo.GetByID(data.ID)
+	if err != nil {
+		return modeluser.Response{}, err
+	}
 
-	updatedUser, err := s.repo.Update(entityUser)
+	dataUser.Balance = dataUser.Balance + data.Balance
+
+	updatedUser, err := s.repo.Update(dataUser)
 	if err != nil {
 		return modeluser.Response{}, err
 	}

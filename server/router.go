@@ -61,5 +61,5 @@ func NewRouter(r *gin.Engine, db *gorm.DB) {
 	routeTransaction := r.Group("/transactions")
 	routeTransaction.POST("", middleware.Authorization, ctrlTransaction.CreateTransaction)
 	routeTransaction.GET("my-transactions", middleware.Authorization, ctrlTransaction.GetTransactionByUserHistories)
-	routeTransaction.GET("user-transaction", middleware.Authorization, ctrlTransaction.GetTransactions)
+	routeTransaction.GET("user-transaction", middleware.Authorization, middleware.AuthorizationAdmin, ctrlTransaction.GetTransactions)
 }
