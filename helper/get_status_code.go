@@ -52,6 +52,14 @@ func GetStatusCode(err error) int {
 		return http.StatusConflict
 	}
 
+	if err.Error() == constant.ErrorOutOfStock.Error() {
+		return http.StatusBadRequest
+	}
+
+	if err.Error() == constant.ErrorBalance.Error() {
+		return http.StatusBadRequest
+	}
+
 	return http.StatusInternalServerError
 }
 

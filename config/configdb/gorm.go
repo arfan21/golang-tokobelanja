@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/arfan21/golang-tokobelanja/entity"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,6 +16,9 @@ func New() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	err = db.AutoMigrate(entity.User{}, entity.Category{}, entity.Product{}, entity.TransactionHistory{})
+
 	if err != nil {
 		return nil, err
 	}
